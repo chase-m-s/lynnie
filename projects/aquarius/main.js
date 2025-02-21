@@ -9,7 +9,7 @@ document.body.appendChild(renderer.domElement);
 
 // Load high-quality star texture
 const starTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/spark1.png');
-
+scene.background = new THREE.Color(0x000010); // Dark blue/black night sky
 // Star data (RA converted to degrees: RA * 15)
 const stars = [
     { ra: 22.487 * 15, dec: -0.116, magnitude: 2.9 },
