@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.154/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.154/examples/jsm/controls/OrbitControls.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -7,9 +8,17 @@ const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// Enable OrbitControls (mouse rotation)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;  // Smooth rotation
+controls.dampingFactor = 0.05;
+controls.enableZoom = true;  // Allow zooming
+controls.enablePan = false;  // Disable panning for a better experience
+
 // Load high-quality star texture
 const starTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/spark1.png');
 scene.background = new THREE.Color(0x000010); // Dark blue/black night sky
+
 // Star data (RA converted to degrees: RA * 15)
 const stars = [
     { ra: 22.487 * 15, dec: -0.116, magnitude: 2.9 },
@@ -97,12 +106,11 @@ camera.position.z = 2;
 function animate() {
     requestAnimationFrame(animate);
 
+    controls.update(); // Update controls for smooth movement
+
     // Twinkling effect: oscillate star sizes slightly
     const time = Date.now() * 0.0005;
     starMaterial.size = 0.15 + 0.05 * Math.sin(time * 2); 
-
-    starsMesh.rotation.y += 0.0005;  // Rotate stars
-    constellationLines.rotation.y += 0.0005;  // Rotate lines
 
     renderer.render(scene, camera);
 }
